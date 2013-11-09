@@ -1,0 +1,10 @@
+*.class
+*.wav
+*.png
+*.jpg
+*.ttf
+
+# Package Files #
+*.jar
+*.war
+*.ear
