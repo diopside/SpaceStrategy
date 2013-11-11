@@ -16,8 +16,8 @@ public class MainMenu extends BasicGameState {
 
 
 
-	private final int ID;
-	private static final int GAME_X = 300, GAME_Y = 100, QUIT_X = SpaceStrategy.WIDTH - GAME_X, QUIT_Y = 100;
+	private final int ID;                                                                               // 93 is the width of quit button image
+	private static final int GAME_X = 300, GAME_Y = 100, QUIT_X = SpaceStrategy.WIDTH - GAME_X - 93, QUIT_Y = 100;
 	private Image background, cursor;
 	private BasicButton gameBtn, quitBtn;
 

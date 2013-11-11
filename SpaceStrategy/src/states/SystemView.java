@@ -18,22 +18,21 @@ import entities.StarSystem;
 import graphics.FadeButton;
 import graphics.ListWindow;
 import graphics.Listable;
+import graphics.systemview.*;
 
 public class SystemView extends BasicGameState implements ExitableState {
 
 	private final int ID;
-	public final static int BACKGROUND_START_Y = 175, BUTTON_HEIGHT = 140;
+	public final static short BACKGROUND_START_Y = 175, BUTTON_HEIGHT = 140, RIGHT_WINDOW_Y = 705, LEFT_WINDOW_X = SpaceStrategy.WIDTH - 325;
 
 	private StarSystem sys;
-	private int planetIndex, buttonIndex;
+	private int planetIndex;
 	private Image background;
-	private FadeButton[] buttons;
 	private ListWindow listWindow;
 	private ArrayList<Listable> tempListableList;
+	private ButtonWindow leftWindow, rightWindow;
 
-
-	private static FadeButton infoBtn, prodBtn, bldBtn, defBtn, popBtn, fleetBtn, siegeBtn, groundWarBtn;
-
+	private static ButtonWindow playerPlanetBW, factionPlanetBW, unownedPlanetBW;
 
 
 	//*******************************************************Constructors and initialization methods***************************************
@@ -45,10 +44,9 @@ public class SystemView extends BasicGameState implements ExitableState {
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
 
+		SystemView.initWindows();
 		initImages();
-		initStaticButtons();
-		listWindow = new ListWindow(301, BACKGROUND_START_Y + 10);
-		buttons = new FadeButton[5];
+		listWindow = new ListWindow(326, BACKGROUND_START_Y + 10);
 		tempListableList = new ArrayList<Listable>();
 
 	}
@@ -79,27 +77,12 @@ public class SystemView extends BasicGameState implements ExitableState {
 
 		background.draw(0, BACKGROUND_START_Y);
 
-		for(FadeButton btn: buttons){
-			btn.render(g, 0, 0);
-		}
 
-
-
-		if (sys != null){
-			switch (getPlanetOwnershipStatus(((GalaxyState) game.getState(SpaceStrategy.GALAXY_STATE_ID)).getWorld())) {
-
-			case 0 : 
-				renderOwnedPlanet(game, g);
-				break;
-			case 1: 
-				renderFactionPlanet(game, g);
-				break;
-
-			default: 
-				renderUnownedPlanet(game, g); 
-				break;
-			}
-		}
+		renderWindows(game, g);
+		leftWindow.render(g, 0, 0);
+		//rightWindow.render(g, 0, 0);
+		
+		
 
 
 
@@ -124,13 +107,16 @@ public class SystemView extends BasicGameState implements ExitableState {
 		}
 
 		if (input.isMousePressed(input.MOUSE_LEFT_BUTTON)){
-			checkButtons(mouseX, mouseY);
+			boolean pressed = leftWindow.checkIfButtonPressed(mouseX, mouseY);
+			if (pressed) {
+				clearLists();
+			}
+			//rightWindow.checkButtons(mouseX, mouseY);
 			checkPlanets(mouseX, mouseY);
 		}
 
-
-		setButtons(((GalaxyState) game.getState(SpaceStrategy.GALAXY_STATE_ID)).getWorld());
 		input.clearKeyPressedRecord();
+		
 
 	}
 
@@ -151,22 +137,11 @@ public class SystemView extends BasicGameState implements ExitableState {
 		return sys.getPlanets()[planetIndex];
 	}
 
-	private void checkButtons(int mouseX, int mouseY){
-		for (int i = 0; i < buttons.length; i ++){
-			if (buttonIndex - 1 != i && buttons[i].contains(mouseX, mouseY)){
-				select(i);
-
-				SpaceStrategy.click1.play();
-			}
-		}
-	}
 
 	private void checkPlanets(int mouseX, int mouseY){
 		for (Planet p: sys.getPlanets()){
 			if (p.contains(mouseX, mouseY)){
-				if (p.getProximityToSun() != planetIndex){ // this will reset the button position if you are selecting a new planet
-					select(0);
-				}
+				
 				planetIndex = p.getProximityToSun();
 				clearLists();
 				SpaceStrategy.click1.play();
@@ -175,14 +150,7 @@ public class SystemView extends BasicGameState implements ExitableState {
 		}
 	}
 
-	private void select(int index){
-		for (FadeButton b: buttons)
-			b.setAlpha(.5f);
-		buttons[index].setAlpha(1f);
-		buttonIndex = index + 1;
-		
-		
-	}
+
 	
 	private void clearLists(){
 		tempListableList.clear();
@@ -199,26 +167,6 @@ public class SystemView extends BasicGameState implements ExitableState {
 
 	}
 
-	private void setButtons(Game world){
-		if (sys == null)
-			return;
-		int status = getPlanetOwnershipStatus(world);
-		if (status == 0){
-			buttons[0] = infoBtn;
-			buttons[1] = prodBtn;
-			buttons[2] = bldBtn;
-			buttons[3] = defBtn;
-			buttons[4] = popBtn;
-		}
-		else {
-			buttons[0] = infoBtn;
-			buttons[1] = fleetBtn;
-			buttons[2] = siegeBtn;
-			buttons[3] = defBtn;
-			buttons[4] = groundWarBtn;
-		}
-
-	}
 
 	private void renderInformation(StateBasedGame game, Graphics g){
 
@@ -274,85 +222,64 @@ public class SystemView extends BasicGameState implements ExitableState {
 	}
 
 	private void renderOwnedPlanet(StateBasedGame game, Graphics g){
-		switch (buttonIndex) {
-		case 1:
+	
+		switch (leftWindow.getSelectedButtonIndex()){
+		case 0: 
 			renderInformation(game, g); 
 			break;
-
-		case 2:
-			renderProduction(game, g);
+		case 1:
+			renderProduction(game, g); 
 			break;
-
-		case 3: 
+		case 2:
 			renderBuildings(game, g); 
 			break;
-
-		case 4: 
+		case 3:
 			renderDefenses(game, g); 
+			
 			break;
-
-		case 5: 
-			renderPopulation(game, g); 
-			break;
-
-		default:
-			break;
-		}
-	}
-
-	private void renderFactionPlanet(StateBasedGame game, Graphics g){
-		switch (buttonIndex) {
-		case 1:
-			renderInformation(game, g); 
-			break;
-
-		case 2:
+		case 4:
 			renderFleet(game, g);
-			break;
-
-		case 3: 
-			renderSiege(game, g); 
-			break;
-
-		case 4: 
-			renderDefenses(game, g); 
-			break;
-
-		case 5: 
-			renderGroundWar(game, g); 
-			break;
-
-		default:
+			
 			break;
 		}
-
+		
+		
+		
 	}
-
+	
 	private void renderUnownedPlanet(StateBasedGame game, Graphics g){
-		switch (buttonIndex) {
+		
+	}
+	
+	private void renderFactionPlanet(StateBasedGame game, Graphics g){
+		
+	}
+
+
+	public void renderWindows(StateBasedGame ga, Graphics g){
+		if (sys == null)
+			return;
+		Game game = ((GalaxyState) ga.getState(SpaceStrategy.GALAXY_STATE_ID)).getWorld();
+		switch (getPlanetOwnershipStatus(game)){
+
+		case 0:
+			leftWindow = playerPlanetBW;
+			renderOwnedPlanet(ga, g);
+			break;
+
 		case 1:
-			renderInformation(game, g); 
-			break;
+			leftWindow = factionPlanetBW;
 
-		case 2:
-			renderFleet(game, g);
+			renderFactionPlanet(ga, g);
 			break;
-
-		case 3: 
-			renderSiege(game, g); 
-			break;
-
-		case 4: 
-			renderDefenses(game, g); 
-			break;
-
-		case 5: 
-			renderGroundWar(game, g); 
-			break;
-
 		default:
+			leftWindow = unownedPlanetBW;
+			renderUnownedPlanet(ga, g);
 			break;
 		}
+		
+		
+
 	}
 
 
@@ -364,27 +291,21 @@ public class SystemView extends BasicGameState implements ExitableState {
 		sys = null;
 		planetIndex = 0;
 
-		select(0);
+		//select(0);
 	}
 
 	public void enter(StateBasedGame game) {
 		game.enterState(ID);
-		setButtons(((GalaxyState) game.getState(SpaceStrategy.GALAXY_STATE_ID)).getWorld());
 		this.unpauseRender();
 		this.unpauseUpdate();
 	}
 
-
-	// *********************************************** static members ***************************************************
-	private static void initStaticButtons(){
-		infoBtn = new FadeButton(0, BACKGROUND_START_Y + 10, "res/buttons/systemview/informationbtn.png");
-		prodBtn = new FadeButton(0, BACKGROUND_START_Y + 10 + BUTTON_HEIGHT, "res/buttons/systemview/productionbtn.png");
-		bldBtn = new FadeButton(0, BACKGROUND_START_Y + 10 + BUTTON_HEIGHT * 2, "res/buttons/systemview/buildingsbtn.png");
-		defBtn = new FadeButton(0, BACKGROUND_START_Y + 10 + BUTTON_HEIGHT * 3, "res/buttons/systemview/defensesbtn.png");
-		popBtn = new FadeButton(0, BACKGROUND_START_Y + 10 + BUTTON_HEIGHT * 4, "res/buttons/systemview/populationbtn.png");
-		fleetBtn = new FadeButton(0, BACKGROUND_START_Y + 10 + BUTTON_HEIGHT, "res/buttons/systemview/fleetbtn.png");
-		siegeBtn = new FadeButton(0, BACKGROUND_START_Y + 10 + BUTTON_HEIGHT * 2, "res/buttons/systemview/siegebtn.png");
-		groundWarBtn = new FadeButton(0, BACKGROUND_START_Y + 10 + BUTTON_HEIGHT * 4, "res/buttons/systemview/groundwarbtn.png");
+	//******************************************** Static Methods ****************************************************
+	
+	private static void initWindows(){
+		playerPlanetBW = new PlayerPlanetButtonWindow(0, BACKGROUND_START_Y + 20);
+		factionPlanetBW = new FactionPlanetButtonWindow(0, BACKGROUND_START_Y + 20);
+		unownedPlanetBW = new UnownedPlanetButtonWindow(0, BACKGROUND_START_Y + 20);
 	}
 
 

@@ -14,6 +14,7 @@ public class InfoBox extends BasicButton implements Clickable, Renderable {
 	public static final short HEIGHT = 80;
 	private Image thumbnail;
 	private String desc;
+	private boolean renderTransparent;
 	
 	public InfoBox(int x, int y) {
 		super(x, y, "res/buttons/systemview/infoboxwindow.png");
@@ -43,6 +44,10 @@ public class InfoBox extends BasicButton implements Clickable, Renderable {
 	public void render(Graphics g, int xOffset, int yOffset) {
 		image.draw(x, y);
 		thumbnail.draw(x, y);
+		if (renderTransparent){
+			thumbnail.setAlpha(.5f);
+			image.setAlpha(.5f);
+		}
 		g.setFont(SpaceStrategy.NEUROPOL);
 		g.setColor(Color.white);
 		g.drawString(desc, x + thumbnail.getWidth() * 2, y + image.getHeight()/2);

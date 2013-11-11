@@ -10,11 +10,13 @@ public class FadeButton extends Button {
 
 	private Image image;
 	private float alpha;
+	private short buttonID;
 	
 	
-	public FadeButton(int x, int y, String loc){
+	public FadeButton(int x, int y, String loc, int buttonID){
 		this.x = x;
 		this.y = y;
+		buttonID = buttonID;
 		initImage(loc);
 		alpha = 1f;
 	}
@@ -28,10 +30,19 @@ public class FadeButton extends Button {
 	}
 	
 	
+	public short getButtonID(){
+		return buttonID;
+	}
+	
 	@Override
 	public boolean contains(int x, int y) {
 		Rectangle r = new Rectangle(this.x, this.y, image.getWidth(), image.getHeight());
 		return r.contains(x, y);
+	}
+	
+	public void setLoc(int xLoc, int yLoc){
+		x = xLoc;
+		y = yLoc;
 	}
 
 	public void setAlpha(float f){
