@@ -4,6 +4,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 import states.SpaceStrategy;
@@ -12,10 +13,16 @@ import entities.Constructable;
 public class InfoBox extends BasicButton implements Clickable, Renderable {
 	
 	public static final short HEIGHT = 80;
+	
+	//************************* Ordinary members *******************************************
 	private Image thumbnail;
 	private String desc;
 	private boolean renderTransparent;
+	private Listable currentData;
 	
+	
+	
+	// ************************************ Constructors and Initialization methods ***************************************
 	public InfoBox(int x, int y) {
 		super(x, y, "res/buttons/systemview/infoboxwindow.png");
 		thumbnail = null;
@@ -28,6 +35,12 @@ public class InfoBox extends BasicButton implements Clickable, Renderable {
 			exception.printStackTrace();
 		}
 	}
+	
+	//***************************************** General Methods *****************************************
+	
+	public Listable getListable(){
+		return currentData;
+	}
 
 	
 	public void setInformation(Listable listable){
@@ -37,17 +50,28 @@ public class InfoBox extends BasicButton implements Clickable, Renderable {
 			exception.printStackTrace();
 		}
 		desc = listable.getDesc();
+		currentData = listable;
 	}
 	
+	public void renderTransparent(boolean b){
+		renderTransparent = b;
+	}
+	
+	
+	
+	
+	//******************************** Interface Methods *********************************************
 
 	@Override
 	public void render(Graphics g, int xOffset, int yOffset) {
 		image.draw(x, y);
 		thumbnail.draw(x, y);
-		if (renderTransparent){
-			thumbnail.setAlpha(.5f);
-			image.setAlpha(.5f);
-		}
+		
+		
+		Float alpha = (renderTransparent) ? .1f : 1f;
+		image.setAlpha(alpha);  thumbnail.setAlpha(alpha);
+		
+		
 		g.setFont(SpaceStrategy.NEUROPOL);
 		g.setColor(Color.white);
 		g.drawString(desc, x + thumbnail.getWidth() * 2, y + image.getHeight()/2);
@@ -55,12 +79,12 @@ public class InfoBox extends BasicButton implements Clickable, Renderable {
 
 	@Override
 	public Shape getShape() {
-		return null;
+		return new Rectangle(x, y, image.getWidth(), image.getHeight());
 	}
 
 	@Override
 	public boolean contains(int x, int y) {
-		return false;
+		return getShape().contains(x, y);
 	}
 
 }

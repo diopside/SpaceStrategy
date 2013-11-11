@@ -133,6 +133,11 @@ public class GalaxyState extends BasicGameState implements ExitableState {
 	}
 	
 	public void closeEnter(StateBasedGame game){
+		/*
+		 * This is for the bottom HUD menus to make a close transition happen when this state is entered from them
+		 */
+		
+		
 		game.enterState(ID, new CloseTransition(true), new CloseTransition(false));
 		this.unpauseRender();
 		this.unpauseUpdate();

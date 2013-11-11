@@ -15,7 +15,9 @@ import org.newdawn.slick.state.transition.Transition;
  * This class will implement the Slick2D transition interface for the SpaceGame.
  * 
  * It will simulate a screen closing from both sides, then opening to reveal the new state.
- * This will be made custom for a screen size 1600 x 900
+ * This will be made custom for a screen size 1600 x 900, depending on if I plan on using for other things I may change that
+ * 
+ * 
  */
 
 public class CloseTransition implements Transition{
@@ -27,8 +29,8 @@ public class CloseTransition implements Transition{
 	private static Sound noise;
 	
 	public CloseTransition(boolean closing){
-		timer = 1.192f;
-		renderStart = (closing) ? 1 : 800;
+		timer = 1.192f;  // This length is tailor made by the length of the sound in seconds
+		renderStart = (closing) ? 1 : 800;// if it is closing starting rendering at 1 else if it is opening start opening at the final closed position (1/2 screen width)
 		playSound = true;
 		initImage();
 		initSound();

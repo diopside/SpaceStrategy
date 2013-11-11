@@ -28,7 +28,7 @@ public class Factory extends Building{
 
 	@Override
 	public Image getThumbnail() throws SlickException {
-		return new Image("res/thumbnails/housethumb.png");
+		return new Image("res/thumbnails/factorythumb.png");
 	}
 
 	@Override

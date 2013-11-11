@@ -12,7 +12,7 @@ import states.SystemView;
 public class PlayerPlanetButtonWindow extends ButtonWindow {
 
 	public PlayerPlanetButtonWindow(int x, int y) {
-		super(x, y, PlayerPlanetButtonWindow.generateButtons());
+		super(x, y, PlayerPlanetButtonWindow.generateButtons(x, y));
 	}
 	
 	
@@ -22,13 +22,13 @@ public class PlayerPlanetButtonWindow extends ButtonWindow {
 	
 	
 	
-	private static ArrayList<FadeButton> generateButtons(){
+	private static ArrayList<FadeButton> generateButtons(int x, int y){
 		ArrayList<FadeButton> buttons = new ArrayList<FadeButton>();
-		buttons.add( new FadeButton(0, SystemView.BACKGROUND_START_Y + 10, "res/buttons/systemview/informationbtn.png", 0));
-		buttons.add( new FadeButton(0, SystemView.BACKGROUND_START_Y + 10 + SystemView.BUTTON_HEIGHT, "res/buttons/systemview/productionbtn.png", 1));
-		buttons.add( new FadeButton(0, SystemView.BACKGROUND_START_Y + 10 + SystemView.BUTTON_HEIGHT * 2, "res/buttons/systemview/buildingsbtn.png", 2));
-		buttons.add( new FadeButton(0, SystemView.BACKGROUND_START_Y + 10 + SystemView.BUTTON_HEIGHT * 3, "res/buttons/systemview/defensesbtn.png", 3));
-		buttons.add( new FadeButton(0, SystemView.BACKGROUND_START_Y + 10 + SystemView.BUTTON_HEIGHT, "res/buttons/systemview/fleetbtn.png", 4));
+		buttons.add( new FadeButton(x, y, "res/buttons/systemview/informationbtn.png", buttons.size()));
+		buttons.add( new FadeButton(x, y + SystemView.BUTTON_HEIGHT, "res/buttons/systemview/productionbtn.png", buttons.size()));
+		buttons.add( new FadeButton(x, y + SystemView.BUTTON_HEIGHT * buttons.size(), "res/buttons/systemview/buildingsbtn.png", buttons.size()));
+		buttons.add( new FadeButton(x, y + SystemView.BUTTON_HEIGHT * buttons.size(), "res/buttons/systemview/defensesbtn.png", buttons.size()));
+		buttons.add( new FadeButton(x, y + SystemView.BUTTON_HEIGHT * buttons.size(), "res/buttons/systemview/fleetbtn.png", buttons.size()));
 		
 		return buttons;
 	}

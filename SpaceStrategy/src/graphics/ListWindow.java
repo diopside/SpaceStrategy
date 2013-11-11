@@ -14,7 +14,7 @@ import states.SpaceStrategy;
 public class ListWindow implements Clickable, Renderable {
 
 	private Image header, footer;
-	private int x, y, listStartX;
+	private int x, y, listStartX, selectedBox;
 	private final int listLength = 8, WIDTH = 999, HEIGHT = 725;
 	private ArrayList<Listable> listItems;
 	private InfoBox[] boxes;
@@ -52,10 +52,9 @@ public class ListWindow implements Clickable, Renderable {
 		listItems.clear();
 	}
 	
-	public void renderBoxes(Graphics g){
-		int index = (listStartX >= listItems.size()) ? 0 : listStartX;
-		System.out.println(index + "    " + listItems.size());
-		for (int totalRendered = 0; (totalRendered < listLength) && (totalRendered < listItems.size()); totalRendered ++){
+	private void renderBoxes(Graphics g){
+		int index = (listStartX >= listItems.size()) ? 0 : listStartX; // case of list size changing and the last selecting list element is now outside of current range
+		for (int totalRendered = index; (totalRendered < listLength) && (totalRendered < listItems.size()); totalRendered ++){
 			boxes[totalRendered].setInformation(listItems.get(index));
 			boxes[totalRendered].render(g, 0, 0);
 			index = (index + 1 >= listItems.size()) ? 0 : index + 1;
@@ -67,6 +66,33 @@ public class ListWindow implements Clickable, Renderable {
 	public ArrayList<Listable> getListItems(){
 		return listItems;
 	}
+	
+	public int checkIfButtonPressed(int mouseX, int mouseY){
+		
+		int index = (listStartX >= listItems.size()) ? 0 : listStartX;
+		for (int boxesChecked = index; (boxesChecked < listLength) && (boxesChecked < listItems.size()); boxesChecked ++){
+			if (boxes[boxesChecked].contains(mouseX, mouseY)){
+				return boxesChecked;
+			}
+		}
+		
+		return -1;
+	}
+	
+	public Listable getListable(int index){
+		return boxes[index].getListable();
+	}
+	
+	public void selectBox(int index){
+		for (InfoBox box: boxes){
+			box.renderTransparent(true);
+		}
+		boxes[index].renderTransparent(false);
+		
+		SpaceStrategy.click1.play();
+		
+	}
+	
 	
 	
 	

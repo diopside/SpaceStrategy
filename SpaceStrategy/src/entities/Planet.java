@@ -10,6 +10,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 import entities.buildings.Building;
+import entities.specials.Special;
 import states.SpaceStrategy;
 import tools.Round;
 import graphics.Clickable;
@@ -27,6 +28,7 @@ public class Planet implements Renderable, Clickable {
 	private Faction owner;
 	private Constructable[] queue;
 	private ArrayList<Building> buildings;
+	private ArrayList<Special> specials;
 	
 	
 	//*********************** Static and final members***********************
