@@ -51,7 +51,7 @@ public class Planet implements Renderable, Clickable {
 		roundValues();
 		
 		ID = (systemID * 10) + proximityToSun;
-		
+		maximumPopulation = size/2;
 	}
 	
 
@@ -160,6 +160,21 @@ public class Planet implements Renderable, Clickable {
 		buildings.add(b);
 	}
 	
+	private float calculatePopulationGrowth(){
+		// this formula will be updated to account for food totals, planetary, technology, and species factors
+		return (population * .03f);
+	}
+	
+	public void resolveTurn(){
+		grow();
+		
+	}
+	
+	private void grow(){
+		float addedPop = calculatePopulationGrowth();
+		population = (addedPop + population >= maximumPopulation) ? maximumPopulation : addedPop + population;
+	}
+	
 	
 	//***********************************************************Interface Methods*******************************************
 	@Override
@@ -169,16 +184,20 @@ public class Planet implements Renderable, Clickable {
 
 	@Override
 	public void render(Graphics g, int xOffset, int yOffset) {
-		Image planetImage = PLANET_IMAGES[imageIndex].copy();
-		if (drawTransparent){
+		Image planetImage = PLANET_IMAGES[imageIndex].copy(); // since there might be 2-3 hundred planets its better to just store the 19 planet images statically and then reference them
+		if (drawTransparent){// in system view all planets but the selected planet will be drawn semi-transparent
 			planetImage.setAlpha(.25f);
 		}
 		planetImage.draw((PLANET_RENDER_SIZE + PLANET_RENDER_SPACING_X)*proximityToSun, PLANET_RENDER_Y);
-		if (owner != null)
+		
+		
+		if (owner != null) // the way to visually indicate planet ownership is drawing the name in the faction color, this will accomplish that task
 			g.setColor(owner.getCOLOR());
 		else
 			g.setColor(Color.white);
-		g.setFont(SpaceStrategy.NEUROPOL);
+		
+		
+		g.setFont(SpaceStrategy.NEUROPOL); // spacey font
 		g.drawString(this.name,(float) ((PLANET_RENDER_SIZE + PLANET_RENDER_SPACING_X)* proximityToSun + .25*PLANET_RENDER_SIZE), PLANET_RENDER_Y + PLANET_RENDER_SIZE + 10);
 	}
 

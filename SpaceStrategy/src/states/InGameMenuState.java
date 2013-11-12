@@ -7,26 +7,23 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import entities.Faction;
-import entities.Game;
+public class InGameMenuState extends BasicGameState implements ExitableState{
 
-public class EndTurnState extends BasicGameState implements ExitableState {
-	
 	private final int ID;
-	private Game world;
 	
-	public EndTurnState(int id){
+	public InGameMenuState(int id){
 		ID = id;
 	}
-
+	
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		world = ((GalaxyState) game.getState(SpaceStrategy.GALAXY_STATE_ID)).getWorld();
+		
 	}
 
 	
-	// ********************************** GameState Methods ************************************************
+	
+	//*************************** Game State Methods *********************************************************
 	@Override
 	public void render(GameContainer container, StateBasedGame game,
 			Graphics g) throws SlickException {
@@ -36,26 +33,28 @@ public class EndTurnState extends BasicGameState implements ExitableState {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
-	
-		for (Faction f: world.getFactions()){
-			f.resolveTurn();
+		Input input = container.getInput();
+
+		if (input.isKeyPressed(input.KEY_ESCAPE)){
+
+			exit(game);
 		}
 		
-		world.incTurn();
-		
-		exit(game);
-		
 
+		input.clearKeyPressedRecord();
 	}
-
+	
 	@Override
 	public int getID() {
 		return ID;
 	}
 
+	// *********************************** General Methods **************************************************
 	
 	
-	// ********************************************** Interface Methods ************************************
+	
+	
+	// ********************************************* Interface Methods *****************************************
 	@Override
 	public void exit(StateBasedGame game) {
 		GalaxyState gS = (GalaxyState) game.getState(SpaceStrategy.GALAXY_STATE_ID);
@@ -68,8 +67,3 @@ public class EndTurnState extends BasicGameState implements ExitableState {
 	}
 
 }
-
-
-
-
-

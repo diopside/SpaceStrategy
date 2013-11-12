@@ -12,6 +12,7 @@ public abstract class Building implements Constructable, Listable {
 	protected static int productionCost;
 	protected static String name;
 	protected short ID;
+	protected boolean isActive; // this will indicate whether factories or other buildings will be operating at maximum efficiency
 	
 	
 	
@@ -34,5 +35,8 @@ public abstract class Building implements Constructable, Listable {
 		return name;
 	}
 	
+	public boolean isActive(){
+		return isActive;
+	}
 	
 }

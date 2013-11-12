@@ -26,6 +26,7 @@ public class Game {
 		factions.add(new Faction(0x4CFF00, 2, "enemy2", this));
 		
 		for (int i = 0; i < factions.size(); i ++){
+			// For now it will get the systems 1-2-3 they should be located fairly randomly and give a random planet to each civ
 			factions.get(i).init(systems[i]);
 		}
 		

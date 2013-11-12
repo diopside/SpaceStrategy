@@ -45,7 +45,7 @@ public class GalaxyState extends BasicGameState implements ExitableState {
 		world = new Game(4);
 		
 		systems = world.getSystems();
-		galaxyMenu = new GalaxyMenu(GALAXY_MENU_X, GALAXY_MENU_Y, "res/menus/hud.png");
+		galaxyMenu = new GalaxyMenu(GALAXY_MENU_X, GALAXY_MENU_Y, "res/menus/hud.png", world);
 		
 	}
 	

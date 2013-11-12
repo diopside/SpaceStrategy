@@ -18,7 +18,7 @@ public class Faction {
 	private int wealth, minerals, food;
 	private float population, populationLoyalty;
 	private ArrayList<Planet> planets;
-	private boolean[] exploredSystems;
+	private boolean[] exploredSystems; // something like this will probably have to be implemented so the played can't view full details of their opponent
 	private Game world;
 	
 	
@@ -95,6 +95,7 @@ public class Faction {
 		addPlanet(p);
 		p.addBuilding(new House(p.getPlanetBuildingIDMax(),p));
 		p.addBuilding(new Factory(p.getPlanetBuildingIDMax(), p));
+		p.setPopulation(2.0f);
 	}
 	
 	public void addPlanet(Planet p){
@@ -102,6 +103,11 @@ public class Faction {
 		p.setOwner(this);
 	}
 	
+	public void resolveTurn(){
+		for (Planet p: planets){
+			p.resolveTurn();
+		}
+	}
 	
 	
 	

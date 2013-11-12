@@ -30,6 +30,8 @@ public class ListWindow implements Clickable, Renderable {
 		for (int i = 0; i < boxes.length; i ++){
 			boxes[i] = new InfoBox(x, y + header.getHeight() + InfoBox.HEIGHT * i);
 		}
+		header.setAlpha(.65f);
+		footer.setAlpha(.65f);
 	}
 	private void initImages(){
 		
@@ -68,14 +70,15 @@ public class ListWindow implements Clickable, Renderable {
 	}
 	
 	public int checkIfButtonPressed(int mouseX, int mouseY){
-		
+		/*
+		 * This will return the index of the box that was selected, if no box was selected it will return a -1
+		 */
 		int index = (listStartX >= listItems.size()) ? 0 : listStartX;
 		for (int boxesChecked = index; (boxesChecked < listLength) && (boxesChecked < listItems.size()); boxesChecked ++){
 			if (boxes[boxesChecked].contains(mouseX, mouseY)){
 				return boxesChecked;
 			}
 		}
-		
 		return -1;
 	}
 	
@@ -84,6 +87,10 @@ public class ListWindow implements Clickable, Renderable {
 	}
 	
 	public void selectBox(int index){
+		
+		/*
+		 * If a box was selected all of the unselected boxes should be set semi-transparent and a clicking sound should play
+		 */
 		for (InfoBox box: boxes){
 			box.renderTransparent(true);
 		}
