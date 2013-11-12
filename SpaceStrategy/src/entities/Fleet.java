@@ -10,7 +10,7 @@ import graphics.Listable;
 
 public class Fleet implements Listable{
 	
-	private final int ID;
+	private final short ID;
 	private ArrayList<Ship> ships;
 	private Leader leader;
 	private StarSystem loc;
@@ -18,7 +18,7 @@ public class Fleet implements Listable{
 	private short wins, losses;
 	
 	public Fleet(int id){
-		ID = id;
+		ID = (short) id;
 	}
 
 	
@@ -48,6 +48,11 @@ public class Fleet implements Listable{
 	@Override
 	public String getDesc() {
 		return ("Leader: " + leader.getName() +"   " +"Size: " + ships.size());
+	}
+
+	@Override
+	public short getID() {
+		return ID;
 	}
 	
 	

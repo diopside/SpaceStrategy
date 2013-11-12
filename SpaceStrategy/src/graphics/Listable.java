@@ -11,4 +11,6 @@ public interface Listable {
 
 	public Image getThumbnail() throws SlickException;
 	public String getDesc();
+	public short getID();
+	
 }

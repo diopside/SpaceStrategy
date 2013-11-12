@@ -15,13 +15,14 @@ import entities.Faction;
 import entities.Game;
 import entities.Planet;
 import entities.StarSystem;
+import entities.buildings.Building;
 import graphics.FadeButton;
 import graphics.ListWindow;
 import graphics.Listable;
 import graphics.systemview.*;
 
 public class SystemView extends BasicGameState implements ExitableState {
-	
+
 	/* 11/11
 	 * The behavior of this game state will be greatly dictated by user input
 	 * 
@@ -41,7 +42,7 @@ public class SystemView extends BasicGameState implements ExitableState {
 	public final static short BACKGROUND_START_Y = 175, BUTTON_HEIGHT = 140, RIGHT_WINDOW_Y = 705, LEFT_WINDOW_X = SpaceStrategy.WIDTH - 325;
 
 	private StarSystem sys;
-	private int planetIndex; // tracks the current selected planet
+	private int planetIndex, oldRightIndex; // tracks the current selected planet
 	private Image background;
 	private ListWindow listWindow; // the center window
 	private ArrayList<Listable> tempListableList; // this list will be used to transfer list of classes implementing Listable to the listWindow
@@ -66,6 +67,7 @@ public class SystemView extends BasicGameState implements ExitableState {
 		listWindow = new ListWindow(326, BACKGROUND_START_Y + 10);
 		tempListableList = new ArrayList<Listable>();
 
+		oldRightIndex = -1;
 	}
 
 	private void initImages(){
@@ -131,6 +133,7 @@ public class SystemView extends BasicGameState implements ExitableState {
 			boolean pressed = leftWindow.checkIfButtonPressed(mouseX, mouseY);
 			if (pressed) { // this will reset the center panel whenever the left selection is changed
 				clearLists();
+				oldRightIndex = -1; // rightwindow will change
 			}
 			checkPlanets(mouseX, mouseY);
 			System.out.println(listWindow.getListItems().size());
@@ -139,6 +142,9 @@ public class SystemView extends BasicGameState implements ExitableState {
 				if (selection != -1){
 					listWindowItem = listWindow.getListable(selection);
 					listWindow.selectBox(selection);
+				}
+				else if (selection >= 0 && selection < 8){
+
 				}
 			}
 		}
@@ -179,10 +185,14 @@ public class SystemView extends BasicGameState implements ExitableState {
 			}
 		}
 	}
-	
+
 	private void resetWindowIndices(){
 		leftWindow.select(0, false);
 		rightWindow.select(0, false);
+	}
+
+	private void changeLists(){
+		listWindow.setList(tempListableList);
 	}
 
 
@@ -221,27 +231,27 @@ public class SystemView extends BasicGameState implements ExitableState {
 		g.setColor(Color.white);
 
 		switch(rightWindow.getSelectedButtonIndex()) {
-		
+
 		case 0: // CASE GENERAL INFORMATION
 			g.drawString("Planet name: " + p.getName(), 350, BACKGROUND_START_Y + 100 );
 			g.drawString("Planet size: " + p.getSize(), 350, BACKGROUND_START_Y + 150 );
 			g.drawString("Mineral Abundance: " + p.getMineralRating(), 350, BACKGROUND_START_Y + 200 );
 			g.drawString("Biological Diversity: " + p.getBioRating(), 350, BACKGROUND_START_Y + 250 );
-			g.drawString("Population: " + p.getPopulation(), 350, BACKGROUND_START_Y + 300 );
+			g.drawString("Population: " + p.getPopulation() +" / "+ p.getMaximumPopulation(), 350, BACKGROUND_START_Y + 300 );
 			if (p.getOwner() != null)
 				g.drawString("Name: " + p.getOwner().toString(), 350, BACKGROUND_START_Y + 350 );
 			else
 				g.drawString("Name: noone", 350, BACKGROUND_START_Y + 350 );
 			break;
-			
+
 		case 1: // CASE SPECIALS INFORMATION
 			g.drawString("SPECIALS WILL BE DISPLAYED HERE", 350, BACKGROUND_START_Y + 100);
 			break;
-			
+
 		case 2: // CASE ECONOMY INFORMATION
 			g.drawString("ECONOMY WILL BE DISPLAYED HERE", 350, BACKGROUND_START_Y+ 100);
 			break;
-			
+
 		case 3: // CASE SCIENCE INFORMATION
 			g.drawString("SCIENCE WILL BE DISPLAYED HERE", 350, BACKGROUND_START_Y+ 100);
 			break;
@@ -257,13 +267,101 @@ public class SystemView extends BasicGameState implements ExitableState {
 
 	}
 	private void renderProduction(StateBasedGame game, Graphics g){
+
+		int val = rightWindow.getSelectedButtonIndex();
+		switch(val){
+
+		case 0: // VIEW PRODUCTION
+			if (oldRightIndex != val){
+
+				clearLists();
+				tempListableList.addAll(getPlanet().getQueue());
+				changeLists();
+			}
+			break;
+
+		case 1: // ADD BUILDING
+			if (oldRightIndex != val){
+
+				clearLists();
+				tempListableList.addAll(Building.getBuildingList());
+				changeLists();
+			}
+
+			break;
+
+		case 2: // ADD SHIP
+			if (oldRightIndex != val){
+				clearLists();
+			}
+
+			break;
+
+
+		case 3: // ADD DEFENSE
+			if (oldRightIndex != val){
+				clearLists();
+			}
+
+			break;
+
+		case 4: // REMOVE ITEM
+			if (oldRightIndex != val){
+				clearLists();
+			}
+			break;
+
+
+
+
+		}
+
+
+
+
+		oldRightIndex = val;
 		listWindow.render(g, 0, 0);
 	}
 	private void renderBuildings(StateBasedGame game, Graphics g){
-		if (tempListableList.size() != getPlanet().getBuildings().size()){ // if the buildings have not been added to the listWindow, add them
-			tempListableList.addAll(getPlanet().getBuildings());
-			listWindow.setList(tempListableList);
+		int val = rightWindow.getSelectedButtonIndex();
+		switch(val){
+
+		case 0: // VIEW BUILDINGS
+			if (oldRightIndex != val){
+				clearLists();
+				tempListableList.addAll(getPlanet().getBuildings());
+				changeLists();
+			}
+
+			break;
+
+		case 1: // SET ACTIVITY
+			if (oldRightIndex != val){
+				clearLists();
+			}
+			break;
+
+		case 2: // CASE ECONOMY INFORMATION
+			if (oldRightIndex != val){
+				clearLists();
+			}
+			break;
+
+		case 3: // CASE SCIENCE INFORMATION
+			if (oldRightIndex != val){
+				clearLists();
+			}
+			break;
+
+		case 4: // CASE POPULATION INFORMATION
+			if (oldRightIndex != val){
+				clearLists();
+			}
+			break;
+
 		}
+
+		oldRightIndex = val;
 		listWindow.render(g, 0, 0);
 	}
 	private void renderDefenses(StateBasedGame game, Graphics g){

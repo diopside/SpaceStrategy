@@ -13,6 +13,10 @@ public class Factory extends Building{
 	public Factory(short ID, Planet p){
 		this.ID = ID;
 		addBuilding(p);
+		productionValue = 2;
+	}
+	public Factory(){
+		
 	}
 	
 	
@@ -38,6 +42,8 @@ public class Factory extends Building{
 
 	@Override
 	public void addBuilding(Planet p) {
+		p.setProduction(p.getProduction() + productionValue);
+		
 	}
 
 	@Override

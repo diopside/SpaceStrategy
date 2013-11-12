@@ -20,8 +20,6 @@ public class InfoBox extends BasicButton implements Clickable, Renderable {
 	private boolean renderTransparent;
 	private Listable currentData;
 	
-	
-	
 	// ************************************ Constructors and Initialization methods ***************************************
 	public InfoBox(int x, int y) {
 		super(x, y, "res/buttons/systemview/infoboxwindow.png");
@@ -64,6 +62,7 @@ public class InfoBox extends BasicButton implements Clickable, Renderable {
 
 	@Override
 	public void render(Graphics g, int xOffset, int yOffset) {
+		
 		image.draw(x, y);
 		thumbnail.draw(x, y);
 		
@@ -74,7 +73,7 @@ public class InfoBox extends BasicButton implements Clickable, Renderable {
 		
 		g.setFont(SpaceStrategy.NEUROPOL);
 		g.setColor(Color.white);
-		g.drawString(desc, x + thumbnail.getWidth() * 2, y + image.getHeight()/2);
+		g.drawString("ID-" + currentData.getID() + "  " +desc, x + thumbnail.getWidth() * 2, y + image.getHeight()/2);
 	}
 
 	@Override

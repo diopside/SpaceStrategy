@@ -80,9 +80,6 @@ public class GalaxyState extends BasicGameState implements ExitableState {
 		Input input = container.getInput();
 		int mouseX = input.getAbsoluteMouseX();
 		int mouseY = input.getAbsoluteMouseY();
-		System.out.println(systems[0].getName());
-		System.out.println(world.getFactions().get(0).getCOLOR());
-		System.out.println(systems[0].getNumberOfFactions());
 		
 		
 		if (input.isKeyDown(input.KEY_A))

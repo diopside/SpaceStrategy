@@ -20,6 +20,7 @@ public class Faction {
 	private ArrayList<Planet> planets;
 	private boolean[] exploredSystems; // something like this will probably have to be implemented so the played can't view full details of their opponent
 	private Game world;
+	private TechTree techTree;
 	
 	
 	//**********************Constructors and initialization methods *****************
@@ -80,6 +81,11 @@ public class Faction {
 		return planets;
 	}
 	
+
+	public TechTree getTechTree() {
+		return techTree;
+	}
+	
 	
 	//*********************************** General Methods *****************************************
 	public boolean equals(Faction otherFaction){
@@ -95,6 +101,8 @@ public class Faction {
 		addPlanet(p);
 		p.addBuilding(new House(p.getPlanetBuildingIDMax(),p));
 		p.addBuilding(new Factory(p.getPlanetBuildingIDMax(), p));
+		p.addBuilding(new House(p.getPlanetBuildingIDMax(),p));
+		p.addBuilding(new Factory(p.getPlanetBuildingIDMax(), p));
 		p.setPopulation(2.0f);
 	}
 	
@@ -108,6 +116,8 @@ public class Faction {
 			p.resolveTurn();
 		}
 	}
+
+
 	
 	
 	

@@ -1,14 +1,16 @@
 package entities.buildings;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.Image;
 
 import entities.Constructable;
 import entities.Planet;
 import graphics.Listable;
 
-public abstract class Building implements Constructable, Listable {
+public abstract class Building implements Constructable {
 
-	protected static float laborCost;
+	protected static float laborUsage;
 	protected static int productionCost;
 	protected static String name;
 	protected short ID;
@@ -37,6 +39,21 @@ public abstract class Building implements Constructable, Listable {
 	
 	public boolean isActive(){
 		return isActive;
+	}
+	public float getLaborUsage(){
+		return laborUsage;
+	}
+	public int getProductionCost(){
+		return productionCost;
+	}
+	
+	
+	public static ArrayList<Building> getBuildingList(){
+		ArrayList<Building> list = new ArrayList<Building>();
+		list.add(new House());
+		list.add(new Factory());
+		
+		return list;
 	}
 	
 }

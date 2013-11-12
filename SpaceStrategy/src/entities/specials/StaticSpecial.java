@@ -16,4 +16,10 @@ public class StaticSpecial extends Special {
 	public void applySpecial(Planet p) {
 	}
 
+	@Override
+	public short getID() {
+		// TODO Auto-generated method stub.
+		return 0;
+	}
+
 }

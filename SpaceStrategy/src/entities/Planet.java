@@ -18,15 +18,15 @@ import graphics.Renderable;
 
 public class Planet implements Renderable, Clickable {
 
-	private final int ID;
+	private final int ID, MAX_BUILDINGS;
 	private short planetBuildingIDMax; // each building will be given an ID which will be 1 higher than the ID of the last building created
 	
 	private String name;
-	private int proximityToSun, size, imageIndex, energy, production, pollution, maximumPopulation;
+	private int proximityToSun, size, imageIndex, energy, production, pollution, maximumPopulation, productionPoints;
 	private boolean drawTransparent; // if one planet is selected the rest will be slightly grayed out
 	private float population, mineralRating, bioRating, hospitableRating, loyalty;
 	private Faction owner;
-	private Constructable[] queue;
+	private ArrayList<Constructable> queue;
 	private ArrayList<Building> buildings;
 	private ArrayList<Special> specials;
 	
@@ -49,9 +49,11 @@ public class Planet implements Renderable, Clickable {
 		imageIndex = (int) (Math.random() * PLANET_IMAGES.length);
 		Planet.generateRandomStats(this);
 		roundValues();
-		
 		ID = (systemID * 10) + proximityToSun;
-		maximumPopulation = size/2;
+		queue = new ArrayList<Constructable>();
+		
+		maximumPopulation = 3 + size;
+		MAX_BUILDINGS = 5 * size;
 	}
 	
 
@@ -145,6 +147,17 @@ public class Planet implements Renderable, Clickable {
 		return buildings;
 	}
 	
+	public void setMaximumPopulation(int a){
+		maximumPopulation = a;
+	}
+	public int getMaximumPopulation(){
+		return maximumPopulation;
+	}
+	
+	public ArrayList<Constructable> getQueue(){
+		return queue;
+	}
+	
 	//********************General methods****************************************************************************
 	public void roundValues(){
 		bioRating = (float) Round.round(bioRating, 4);
@@ -157,6 +170,7 @@ public class Planet implements Renderable, Clickable {
 	}
 	
 	public void addBuilding(Building b){
+		b.addBuilding(this);
 		buildings.add(b);
 	}
 	
@@ -167,6 +181,30 @@ public class Planet implements Renderable, Clickable {
 	
 	public void resolveTurn(){
 		grow();
+		//updateResources();
+		
+	}
+	
+	private float getLaborEfficiency(){
+		float laborNeed = 0;
+		for (Building b: buildings){
+			laborNeed += b.getLaborUsage();
+		}
+		
+		return (laborNeed/population);
+		
+	}
+	
+	private void updateResources(){
+		/*
+		 * This method will determine and set the amount of production, credits, science, food, among other things the planet will be producing.
+		 */
+		
+		float productionMod = (getLaborEfficiency() >= owner.getTechTree().getMaxProductionModifier()) ? owner.getTechTree().getMaxProductionModifier() : getLaborEfficiency();
+		productionPoints = (int) (productionMod * production);
+		
+		
+		
 		
 	}
 	
@@ -174,6 +212,8 @@ public class Planet implements Renderable, Clickable {
 		float addedPop = calculatePopulationGrowth();
 		population = (addedPop + population >= maximumPopulation) ? maximumPopulation : addedPop + population;
 	}
+	
+	
 	
 	
 	//***********************************************************Interface Methods*******************************************

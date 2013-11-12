@@ -14,8 +14,8 @@ import states.SpaceStrategy;
 public class ListWindow implements Clickable, Renderable {
 
 	private Image header, footer;
-	private int x, y, listStartX, selectedBox;
-	private final int listLength = 8, WIDTH = 999, HEIGHT = 725;
+	private int x, y, listStartIndex, selectedBox;
+	private final int LIST_LENGTH = 8, WIDTH = 999, HEIGHT = 725;
 	private ArrayList<Listable> listItems;
 	private InfoBox[] boxes;
 	
@@ -24,11 +24,11 @@ public class ListWindow implements Clickable, Renderable {
 	public ListWindow(int x, int y){
 		this.x = x;
 		this.y = y;
-		boxes = new InfoBox[8];
+		boxes = new InfoBox[LIST_LENGTH];
 		listItems = new ArrayList<Listable>();
 		initImages();
-		for (int i = 0; i < boxes.length; i ++){
-			boxes[i] = new InfoBox(x, y + header.getHeight() + InfoBox.HEIGHT * i);
+		for (int i = 0; i < LIST_LENGTH; i ++){
+			boxes[i] = new InfoBox(x, y + header.getHeight() + i * InfoBox.HEIGHT);
 		}
 		header.setAlpha(.65f);
 		footer.setAlpha(.65f);
@@ -47,20 +47,19 @@ public class ListWindow implements Clickable, Renderable {
 	//****************************************** General Methods ***********************************************************
 	public void setList(ArrayList<Listable> items){
 		listItems.addAll(items);
-		listStartX = 0;
+		listStartIndex = 0;
 	}
+	
 	
 	public void clearList(){
 		listItems.clear();
 	}
 	
 	private void renderBoxes(Graphics g){
-		int index = (listStartX >= listItems.size()) ? 0 : listStartX; // case of list size changing and the last selecting list element is now outside of current range
-		for (int totalRendered = index; (totalRendered < listLength) && (totalRendered < listItems.size()); totalRendered ++){
-			boxes[totalRendered].setInformation(listItems.get(index));
-			boxes[totalRendered].render(g, 0, 0);
-			index = (index + 1 >= listItems.size()) ? 0 : index + 1;
+		for (int i = 0; (i < boxes.length) && (i < listItems.size()); i ++){
+			boxes[i].render(g, 0, 0);
 		}
+		
 		
 		
 	}
@@ -73,14 +72,40 @@ public class ListWindow implements Clickable, Renderable {
 		/*
 		 * This will return the index of the box that was selected, if no box was selected it will return a -1
 		 */
-		int index = (listStartX >= listItems.size()) ? 0 : listStartX;
-		for (int boxesChecked = index; (boxesChecked < listLength) && (boxesChecked < listItems.size()); boxesChecked ++){
-			if (boxes[boxesChecked].contains(mouseX, mouseY)){
-				return boxesChecked;
-			}
-		}
+		
+		setBoxData();
+		
+		for (int i = 0; (i < LIST_LENGTH) && (i < listItems.size()); i ++)
+			if (boxes[i].contains(mouseX, mouseY))
+				return i;
+		
+		
+		checkHeader(mouseX, mouseY);
+		checkFooter(mouseX, mouseY);
+		
 		return -1;
 	}
+	
+	public void checkHeader(int mouseX, int mouseY){
+		Rectangle headerBox = new Rectangle(x, y, header.getWidth(), header.getHeight());
+		if (headerBox.contains(mouseX, mouseY)){
+			listStartIndex = (listStartIndex - 1 < 0)? listItems.size() - 1 : listStartIndex - 1;
+			SpaceStrategy.click1.play();
+		}
+		
+			// TO DO: edit this to check for sorts, implement comparators for the listables
+	}
+	
+	public void checkFooter(int mouseX, int mouseY){
+		Rectangle footerBox = new Rectangle(x, SpaceStrategy.HEIGHT - footer.getHeight(), footer.getWidth(), footer.getHeight());
+		
+		if (footerBox.contains(mouseX, mouseY)){
+			listStartIndex = (listStartIndex + 1 >= listItems.size()) ? 0 : listStartIndex + 1;
+			SpaceStrategy.click1.play();
+		}
+	}
+	
+	
 	
 	public Listable getListable(int index){
 		return boxes[index].getListable();
@@ -100,7 +125,12 @@ public class ListWindow implements Clickable, Renderable {
 		
 	}
 	
-	
+	public void setBoxData(){
+		for (int i = 0; (i < LIST_LENGTH) && (i < listItems.size()); i ++){
+			boxes[i].setInformation(listItems.get((i + listStartIndex) % listItems.size()));
+		}
+		
+	}
 	
 	
 	
@@ -110,6 +140,7 @@ public class ListWindow implements Clickable, Renderable {
 		header.draw(x, y);
 		footer.draw(x, SpaceStrategy.HEIGHT - footer.getHeight());
 		
+		setBoxData();
 		renderBoxes(g);
 		
 		
