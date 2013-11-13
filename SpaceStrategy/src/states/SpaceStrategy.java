@@ -14,6 +14,9 @@ import org.newdawn.slick.util.ResourceLoader;
 
 import entities.Planet;
 import entities.StarSystem;
+/*
+ * 11/11 Status: 2400 SLOC
+ */
 
 public class SpaceStrategy extends StateBasedGame{
 	

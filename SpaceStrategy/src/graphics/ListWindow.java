@@ -111,6 +111,10 @@ public class ListWindow implements Clickable, Renderable {
 		return boxes[index].getListable();
 	}
 	
+	public InfoBox[] getBoxes(){
+		return boxes;
+	}
+	
 	public void selectBox(int index){
 		
 		/*

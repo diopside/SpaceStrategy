@@ -19,6 +19,7 @@ public class Fleet implements Listable{
 	
 	public Fleet(int id){
 		ID = (short) id;
+		ships = new ArrayList<>();
 	}
 
 	

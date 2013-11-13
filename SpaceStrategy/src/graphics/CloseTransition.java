@@ -30,7 +30,7 @@ public class CloseTransition implements Transition{
 	
 	public CloseTransition(boolean closing){
 		timer = 1.192f;  // This length is tailor made by the length of the sound in seconds
-		renderStart = (closing) ? 1 : 800;// if it is closing starting rendering at 1 else if it is opening start opening at the final closed position (1/2 screen width)
+		renderStart = (closing) ? 1 : 800;// if it is closing start rendering at 1 else if it is opening start opening at the final closed position (1/2 screen width)
 		playSound = true;
 		initImage();
 		initSound();
@@ -89,11 +89,13 @@ public class CloseTransition implements Transition{
 	public void update(StateBasedGame game, GameContainer container, int delta)
 			throws SlickException {
 		if (playSound) {
+			/*
+			 * This is added both to choose to disable the sound entirely and so that it doesn't repeatedly play sound each update
+			 */
 			noise.play();
 			playSound = false;
 		}
 		
-		System.out.println(renderStart);
 		if (closing){
 			renderStart += delta * (1.0f/ (float) timer);
 			if (renderStart > 800)

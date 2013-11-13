@@ -152,7 +152,9 @@ public class SystemView extends BasicGameState implements ExitableState {
 		input.clearKeyPressedRecord();
 
 
-	}
+	} // end update method
+	
+	
 
 	@Override
 	public int getID() {
@@ -161,11 +163,19 @@ public class SystemView extends BasicGameState implements ExitableState {
 
 
 	//*************************************************General Methods***********************************************
-	public void setSelectedSystem(StarSystem sys){
+	void setSelectedSystem(StarSystem sys){
 		this.sys = sys;
 	}
+	
 
-	public Planet getPlanet(){
+	
+	
+	private Game getWorld(StateBasedGame game){
+		Game world = ((GalaxyState) game.getState(SpaceStrategy.GALAXY_STATE_ID)).getWorld();
+		return world;
+	}
+
+	private Planet getPlanet(){
 		if (sys == null)
 			return null;
 		return sys.getPlanets()[planetIndex];
@@ -266,8 +276,10 @@ public class SystemView extends BasicGameState implements ExitableState {
 
 
 	}
+	
+	
 	private void renderProduction(StateBasedGame game, Graphics g){
-
+		int index = -1;
 		int val = rightWindow.getSelectedButtonIndex();
 		switch(val){
 
@@ -282,7 +294,6 @@ public class SystemView extends BasicGameState implements ExitableState {
 
 		case 1: // ADD BUILDING
 			if (oldRightIndex != val){
-
 				clearLists();
 				tempListableList.addAll(Building.getBuildingList());
 				changeLists();
@@ -465,8 +476,7 @@ public class SystemView extends BasicGameState implements ExitableState {
 		if (sys == null)
 			return;
 
-		Game game = ((GalaxyState) ga.getState(SpaceStrategy.GALAXY_STATE_ID)).getWorld();
-		switch (getPlanetOwnershipStatus(game)){ // these two lines will determine whether the selected planet is unowned, player owned, or computer owned
+		switch (getPlanetOwnershipStatus(getWorld(ga))){ // these two lines will determine whether the selected planet is unowned, player owned, or computer owned
 
 		case 0:
 			leftWindow = playerPlanetBW;

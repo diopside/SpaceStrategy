@@ -33,7 +33,7 @@ public class Game {
 	}
 	
 	
-	//********************************************* Getters and Setters **********************************************************************
+	//********************************************* Getters and Setters ******************************************************
 	
 	public int turn(){
 		return turn;
@@ -55,7 +55,12 @@ public class Game {
 	
 	public void endTurn(StateBasedGame game){
 		
+		for (Faction f: factions){
+			f.resolveTurn();
+		}
 		
+		
+		incTurn();
 		
 	}
 	

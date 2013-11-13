@@ -37,11 +37,8 @@ public class EndTurnState extends BasicGameState implements ExitableState {
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 	
-		for (Faction f: world.getFactions()){
-			f.resolveTurn();
-		}
 		
-		world.incTurn();
+		world.endTurn(game);
 		
 		exit(game);
 		
