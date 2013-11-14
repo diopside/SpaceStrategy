@@ -10,14 +10,12 @@ public class Factory extends Building{
 	
 	private byte productionValue;
 	
-	public Factory(short ID, Planet p){
-		this.ID = ID;
+	public Factory(short id, Planet p){
+		this.ID = p.getPlanetBuildingIDMax();
 		addBuilding(p);
 		productionValue = 2;
 	}
-	public Factory(){
-		
-	}
+	
 	
 	
 	
@@ -55,5 +53,14 @@ public class Factory extends Building{
 	public void resolveBuildingTurn(Planet p) {
 		
 	}
+	@Override
+	public void remove() {
+		
+	}
+	@Override
+	public String viewActivityInformation() {
+		return "This building consumes energy and minerals";
+	}
+	
 
 }

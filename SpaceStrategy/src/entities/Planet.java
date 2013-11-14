@@ -136,13 +136,11 @@ public class Planet implements Renderable, Clickable {
 	}
 	public short getPlanetBuildingIDMax(){
 		short s = planetBuildingIDMax;
-		incPlanetBuildingIDMax();
+		planetBuildingIDMax ++;
 		return s;
 		
 	}
-	public void incPlanetBuildingIDMax(){
-		planetBuildingIDMax ++;
-	}
+	
 	public ArrayList<Building> getBuildings(){
 		return buildings;
 	}

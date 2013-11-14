@@ -11,14 +11,16 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import entities.Constructable;
 import entities.Faction;
 import entities.Game;
 import entities.Planet;
+import entities.Removeable;
 import entities.StarSystem;
 import entities.buildings.Building;
 import graphics.FadeButton;
-import graphics.ListWindow;
 import graphics.Listable;
+import graphics.listwindows.*;
 import graphics.systemview.*;
 
 public class SystemView extends BasicGameState implements ExitableState {
@@ -39,7 +41,7 @@ public class SystemView extends BasicGameState implements ExitableState {
 	 */
 
 	private final int ID;
-	public final static short BACKGROUND_START_Y = 175, BUTTON_HEIGHT = 140, RIGHT_WINDOW_Y = 705, LEFT_WINDOW_X = SpaceStrategy.WIDTH - 325;
+	public final static short BACKGROUND_START_Y = 175, BUTTON_HEIGHT = 140, RIGHT_WINDOW_Y = 705, LEFT_WINDOW_X = SpaceStrategy.WIDTH - 325, LIST_WINDOW_START_X = 326;
 
 	private StarSystem sys;
 	private int planetIndex, oldRightIndex; // tracks the current selected planet
@@ -64,8 +66,8 @@ public class SystemView extends BasicGameState implements ExitableState {
 
 		SystemView.initWindows();
 		initImages();
-		listWindow = new ListWindow(326, BACKGROUND_START_Y + 10);
 		tempListableList = new ArrayList<Listable>();
+		listWindow = null;
 
 		oldRightIndex = -1;
 	}
@@ -136,8 +138,7 @@ public class SystemView extends BasicGameState implements ExitableState {
 				oldRightIndex = -1; // rightwindow will change
 			}
 			checkPlanets(mouseX, mouseY);
-			System.out.println(listWindow.getListItems().size());
-			if (listWindow.getListItems().size() > 0){
+			if (listWindow != null && listWindow.getListItems().size() > 0){
 				int selection = listWindow.checkIfButtonPressed(mouseX, mouseY);
 				if (selection != -1){
 					listWindowItem = listWindow.getListable(selection);
@@ -201,16 +202,13 @@ public class SystemView extends BasicGameState implements ExitableState {
 		rightWindow.select(0, false);
 	}
 
-	private void changeLists(){
-		listWindow.setList(tempListableList);
-	}
+
 
 
 
 	private void clearLists(){
 		// without clearing the list, unfortunate glitches like ceaselessly expanding listwindow entries can occur
 		tempListableList.clear();
-		listWindow.clearList();
 	}
 
 	private int getPlanetOwnershipStatus(Game world){
@@ -288,15 +286,16 @@ public class SystemView extends BasicGameState implements ExitableState {
 
 				clearLists();
 				tempListableList.addAll(getPlanet().getQueue());
-				changeLists();
+				listWindow = new ViewListWindow(LIST_WINDOW_START_X, BACKGROUND_START_Y, tempListableList);
 			}
 			break;
 
 		case 1: // ADD BUILDING
 			if (oldRightIndex != val){
 				clearLists();
-				tempListableList.addAll(Building.getBuildingList());
-				changeLists();
+				ArrayList<Constructable> cons = new ArrayList<>();
+				cons.addAll(Building.getBuildingList(getPlanet()));
+				listWindow = new QueueListWindow(LIST_WINDOW_START_X, BACKGROUND_START_Y, cons, getPlanet().getQueue(), getPlanet());
 			}
 
 			break;
@@ -319,6 +318,9 @@ public class SystemView extends BasicGameState implements ExitableState {
 		case 4: // REMOVE ITEM
 			if (oldRightIndex != val){
 				clearLists();
+				ArrayList<Removeable> removes = new ArrayList<>();
+				removes.addAll(getPlanet().getQueue());
+				listWindow = new RemoveItemListWindow(LIST_WINDOW_START_X, BACKGROUND_START_Y, removes);
 			}
 			break;
 
@@ -341,7 +343,7 @@ public class SystemView extends BasicGameState implements ExitableState {
 			if (oldRightIndex != val){
 				clearLists();
 				tempListableList.addAll(getPlanet().getBuildings());
-				changeLists();
+				listWindow = new ViewListWindow(LIST_WINDOW_START_X, BACKGROUND_START_Y, tempListableList);
 			}
 
 			break;

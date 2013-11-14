@@ -3,6 +3,7 @@ package entities.buildings;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import entities.Faction;
 import entities.Planet;
 import graphics.InfoBox;
 
@@ -13,19 +14,19 @@ public class House extends Building{
 	
 	
 	//*************************************** Constructors and initialization methods ********************************
-	public House(short ID, Planet p){
-		this.ID = ID;
+	public House(short id, Planet p){
+		this.ID = id;
 		this.laborUsage = 0;
 		addBuilding(p);
 		populationCapacity = 5;
 	}
 	
+	
+	
+	
 	public House(){
 		
 	}
-	
-	
-	
 	
 	
 	
@@ -66,6 +67,16 @@ public class House extends Building{
 	@Override
 	public String getDesc() {
 		return "Adds to the maximum population of the planet";
+	}
+
+	@Override
+	public void remove() {
+		
+	}
+
+	@Override
+	public String viewActivityInformation() {
+		return "This building does not use any energy";
 	}
 	
 	

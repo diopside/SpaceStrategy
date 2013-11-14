@@ -100,9 +100,9 @@ public class Faction {
 		Planet p = s.getPlanets()[(int) (Math.random() * s.getPlanets().length)];
 		addPlanet(p);
 		p.addBuilding(new House(p.getPlanetBuildingIDMax(),p));
-		p.addBuilding(new Factory(p.getPlanetBuildingIDMax(), p));
+		p.addBuilding(new Factory(p.getPlanetBuildingIDMax(),p));
 		p.addBuilding(new House(p.getPlanetBuildingIDMax(),p));
-		p.addBuilding(new Factory(p.getPlanetBuildingIDMax(), p));
+		p.addBuilding(new Factory(p.getPlanetBuildingIDMax(),p));
 		p.setPopulation(2.0f);
 	}
 	

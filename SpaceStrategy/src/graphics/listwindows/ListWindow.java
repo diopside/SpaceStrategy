@@ -1,7 +1,13 @@
-package graphics;
+package graphics.listwindows;
+
+import graphics.Clickable;
+import graphics.InfoBox;
+import graphics.Listable;
+import graphics.Renderable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -11,13 +17,14 @@ import org.newdawn.slick.geom.Shape;
 
 import states.SpaceStrategy;
 
-public class ListWindow implements Clickable, Renderable {
+abstract public class ListWindow implements Clickable, Renderable {
 
-	private Image header, footer;
-	private int x, y, listStartIndex, selectedBox;
-	private final int LIST_LENGTH = 8, WIDTH = 999, HEIGHT = 725;
-	private ArrayList<Listable> listItems;
-	private InfoBox[] boxes;
+	protected Image header;
+	protected Image footer;
+	protected int x, y, listStartIndex, selectedBox;
+	protected final int LIST_LENGTH = 8, WIDTH = 999, HEIGHT = 725;
+	protected List listItems;
+	protected InfoBox[] boxes;
 	
 	
 	//***************************************** Constructors and Initialization Methods **************************************
@@ -25,7 +32,6 @@ public class ListWindow implements Clickable, Renderable {
 		this.x = x;
 		this.y = y;
 		boxes = new InfoBox[LIST_LENGTH];
-		listItems = new ArrayList<Listable>();
 		initImages();
 		for (int i = 0; i < LIST_LENGTH; i ++){
 			boxes[i] = new InfoBox(x, y + header.getHeight() + i * InfoBox.HEIGHT);
@@ -55,7 +61,7 @@ public class ListWindow implements Clickable, Renderable {
 		listItems.clear();
 	}
 	
-	private void renderBoxes(Graphics g){
+	protected void renderBoxes(Graphics g){
 		for (int i = 0; (i < boxes.length) && (i < listItems.size()); i ++){
 			boxes[i].render(g, 0, 0);
 		}
@@ -64,7 +70,7 @@ public class ListWindow implements Clickable, Renderable {
 		
 	}
 	
-	public ArrayList<Listable> getListItems(){
+	public List getListItems(){
 		return listItems;
 	}
 	
@@ -115,40 +121,15 @@ public class ListWindow implements Clickable, Renderable {
 		return boxes;
 	}
 	
-	public void selectBox(int index){
-		
-		/*
-		 * If a box was selected all of the unselected boxes should be set semi-transparent and a clicking sound should play
-		 */
-		for (InfoBox box: boxes){
-			box.renderTransparent(true);
-		}
-		boxes[index].renderTransparent(false);
-		
-		SpaceStrategy.click1.play();
-		
-	}
+	abstract public void selectBox(int index);
 	
-	public void setBoxData(){
-		for (int i = 0; (i < LIST_LENGTH) && (i < listItems.size()); i ++){
-			boxes[i].setInformation(listItems.get((i + listStartIndex) % listItems.size()));
-		}
-		
-	}
+	
+	abstract void setBoxData();
 	
 	
 	
 	// ********************************** Interface Methods *****************************************************************
-	@Override
-	public void render(Graphics g, int xOffset, int yOffset) {
-		header.draw(x, y);
-		footer.draw(x, SpaceStrategy.HEIGHT - footer.getHeight());
 		
-		setBoxData();
-		renderBoxes(g);
-		
-		
-	}
 	
 	@Override
 	public Shape getShape() {
