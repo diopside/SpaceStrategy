@@ -31,6 +31,7 @@ public class Faction {
 		planets = new ArrayList<Planet>();
 		this.name = name;
 		exploredSystems = new boolean[world.getSystems().length];
+		techTree = new TechTree();
 	}
 
 	

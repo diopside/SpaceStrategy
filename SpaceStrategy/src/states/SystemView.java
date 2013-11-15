@@ -11,6 +11,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import entities.Activatable;
 import entities.Constructable;
 import entities.Faction;
 import entities.Game;
@@ -351,6 +352,9 @@ public class SystemView extends BasicGameState implements ExitableState {
 		case 1: // SET ACTIVITY
 			if (oldRightIndex != val){
 				clearLists();
+				ArrayList<Activatable> activatables = new ArrayList<>();
+				activatables.addAll(getPlanet().getBuildings());
+				listWindow = new ActivityListWindow(LIST_WINDOW_START_X, BACKGROUND_START_Y, activatables);
 			}
 			break;
 

@@ -12,10 +12,10 @@ import graphics.Listable;
 public abstract class Building implements Constructable, Activatable {
 
 	protected static float laborUsage;
-	protected static int productionCost;
+	protected static int productionCost, startProductionCost;
 	protected static String name;
 	protected short ID;
-	protected boolean isActive, isBeingDeconstructed; // this will indicate whether factories or other buildings will be operating at maximum efficiency
+	protected boolean isActive = true, isBeingDeconstructed = false; // this will indicate whether factories or other buildings will be operating at maximum efficiency
 	
 	
 	
@@ -38,9 +38,7 @@ public abstract class Building implements Constructable, Activatable {
 		return name;
 	}
 	
-	public boolean isActive(){
-		return isActive;
-	}
+
 	public float getLaborUsage(){
 		return laborUsage;
 	}
@@ -68,5 +66,28 @@ public abstract class Building implements Constructable, Activatable {
 	public boolean isBeingDeconstructed(){
 		return isBeingDeconstructed;
 	}
+	
+	protected int getConsumedProductionPoints(Planet p){
+		int i = (p.getProductionPoints() >= productionCost) ? productionCost : p.getProductionPoints();
+		p.setProductionPoints(p.getProductionPoints() - i);
+		return i;
+	}
+	
+	@Override
+	public void construct(Planet p) {
+		productionCost -= getConsumedProductionPoints(p);
+
+	}
+	
+	public float getCompletionPercentage(){
+		return (1f - (float)productionCost/startProductionCost);
+	}
+	
+	@Override
+	public boolean isActive(){
+		return isActive;
+	}
+	
+	
 	
 }

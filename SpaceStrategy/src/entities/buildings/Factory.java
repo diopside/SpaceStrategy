@@ -14,6 +14,8 @@ public class Factory extends Building{
 		this.ID = p.getPlanetBuildingIDMax();
 		addBuilding(p);
 		productionValue = 2;
+		productionCost = startProductionCost = 5;
+		laborUsage = 1;
 	}
 	
 	
@@ -61,6 +63,16 @@ public class Factory extends Building{
 	public String viewActivityInformation() {
 		return "This building consumes energy and minerals";
 	}
+
+
 	
 
 }
+
+
+
+
+
+
+
+

@@ -1,6 +1,7 @@
 package entities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -20,9 +21,15 @@ public class Planet implements Renderable, Clickable {
 
 	private final int ID, MAX_BUILDINGS;
 	private short planetBuildingIDMax; // each building will be given an ID which will be 1 higher than the ID of the last building created
-	
 	private String name;
-	private int proximityToSun, size, imageIndex, energy, production, pollution, maximumPopulation, productionPoints;
+	
+	private int proximityToSun, size, imageIndex, energy, production, pollution, maximumPopulation, productionPoints, previousProductionPoints;
+	/*ProxToSun represents the index in the starSystemArray, energy will dictate potential buildings and other energy consuming things, will be provided by buildings and other things
+	 * production will be productive capacity of factories and the like yielding productionPoints each turn
+	 */
+	
+	
+	
 	private boolean drawTransparent; // if one planet is selected the rest will be slightly grayed out
 	private float population, mineralRating, bioRating, hospitableRating, loyalty;
 	private Faction owner;
@@ -138,7 +145,6 @@ public class Planet implements Renderable, Clickable {
 		short s = planetBuildingIDMax;
 		planetBuildingIDMax ++;
 		return s;
-		
 	}
 	
 	public ArrayList<Building> getBuildings(){
@@ -156,6 +162,13 @@ public class Planet implements Renderable, Clickable {
 		return queue;
 	}
 	
+	public int getProductionPoints(){
+		return productionPoints;
+	}
+	
+	public void setProductionPoints(int a){
+		productionPoints = a;
+	}
 	//********************General methods****************************************************************************
 	public void roundValues(){
 		bioRating = (float) Round.round(bioRating, 4);
@@ -168,8 +181,8 @@ public class Planet implements Renderable, Clickable {
 	}
 	
 	public void addBuilding(Building b){
-		b.addBuilding(this);
 		buildings.add(b);
+		b.addBuilding(this);
 	}
 	
 	private float calculatePopulationGrowth(){
@@ -179,9 +192,51 @@ public class Planet implements Renderable, Clickable {
 	
 	public void resolveTurn(){
 		grow();
-		//updateResources();
+		updateResources();
+		if (queue.size() > 0)
+			constructItems(queue.size() - 1);
+		deconstructItems();
+		
+		
+		previousProductionPoints = productionPoints;
+		productionPoints = 0; // Production can not be saved, but the last turns production will be displayed
+	}
+	
+	private void deconstructItems(){
+		ArrayList<Removeable> removeables = new ArrayList<>();
+		for (int i = 0; i < queue.size(); i ++){
+			if (queue.get(i).isBeingDeconstructed()){
+				removeables.add(queue.get(i));
+			}
+		}
+		
+		queue.removeAll(removeables);
+		
+		
 		
 	}
+	
+	private void constructItems(int index){
+		ArrayList<Building> buildingsBuilt = new ArrayList<>();
+		
+		for (Constructable c: queue){
+			c.construct(this);
+			if (c.getCompletionPercentage() == 1f){
+				if (c instanceof Building)
+					buildingsBuilt.add((Building) c);
+			}
+		}
+		
+		for (Building b: buildingsBuilt)
+			addBuilding(b);
+		
+		queue.removeAll(buildingsBuilt);
+		
+		
+		
+	}
+	
+	
 	
 	private float getLaborEfficiency(){
 		float laborNeed = 0;
@@ -189,7 +244,9 @@ public class Planet implements Renderable, Clickable {
 			laborNeed += b.getLaborUsage();
 		}
 		
-		return (laborNeed/population);
+		if(laborNeed == 0)
+			return Float.MAX_VALUE;
+		return (laborNeed/production);
 		
 	}
 	
@@ -200,7 +257,7 @@ public class Planet implements Renderable, Clickable {
 		
 		float productionMod = (getLaborEfficiency() >= owner.getTechTree().getMaxProductionModifier()) ? owner.getTechTree().getMaxProductionModifier() : getLaborEfficiency();
 		productionPoints = (int) (productionMod * production);
-		
+		System.out.println("PP: " + productionPoints);
 		
 		
 		

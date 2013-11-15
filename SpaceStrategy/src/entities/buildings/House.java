@@ -19,6 +19,7 @@ public class House extends Building{
 		this.laborUsage = 0;
 		addBuilding(p);
 		populationCapacity = 5;
+		productionCost= startProductionCost = 10;
 	}
 	
 	
@@ -78,6 +79,9 @@ public class House extends Building{
 	public String viewActivityInformation() {
 		return "This building does not use any energy";
 	}
+
+
+
 	
 	
 	

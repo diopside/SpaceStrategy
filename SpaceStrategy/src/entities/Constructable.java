@@ -11,7 +11,8 @@ public interface Constructable extends Listable, Removeable {
 	
 
 	public boolean canBuild(Planet p);
-	
+	public void construct(Planet p);
+	public float getCompletionPercentage();
 	
 	
 	
