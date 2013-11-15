@@ -1,4 +1,4 @@
-package entities.weapons;
+package entities.shipitems;
 
 public abstract class Weapon {
 

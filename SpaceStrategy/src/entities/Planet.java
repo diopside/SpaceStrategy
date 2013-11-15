@@ -36,6 +36,7 @@ public class Planet implements Renderable, Clickable {
 	private ArrayList<Constructable> queue;
 	private ArrayList<Building> buildings;
 	private ArrayList<Special> specials;
+	private ArrayList<Fleet> fleets;
 	
 	
 	//*********************** Static and final members***********************
@@ -58,6 +59,7 @@ public class Planet implements Renderable, Clickable {
 		roundValues();
 		ID = (systemID * 10) + proximityToSun;
 		queue = new ArrayList<Constructable>();
+		fleets = new ArrayList<>();
 		
 		maximumPopulation = 3 + size;
 		MAX_BUILDINGS = 5 * size;
@@ -68,6 +70,10 @@ public class Planet implements Renderable, Clickable {
 	//********************************************* Getters and Setters ****************************************************
 	public int getID(){
 		return ID;
+	}
+	
+	public ArrayList<Fleet> getFleets(){
+		return fleets;
 	}
 	public int getSystemID(){
 		return ID/10;

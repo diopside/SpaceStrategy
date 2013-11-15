@@ -56,7 +56,7 @@ public class Factory extends Building{
 		
 	}
 	@Override
-	public void remove() {
+	public void remove(Planet p) {
 		
 	}
 	@Override

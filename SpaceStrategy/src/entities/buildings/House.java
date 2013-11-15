@@ -71,7 +71,7 @@ public class House extends Building{
 	}
 
 	@Override
-	public void remove() {
+	public void remove(Planet p) {
 		
 	}
 

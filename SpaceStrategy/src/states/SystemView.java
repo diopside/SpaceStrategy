@@ -19,6 +19,7 @@ import entities.Planet;
 import entities.Removeable;
 import entities.StarSystem;
 import entities.buildings.Building;
+import entities.ships.Ship;
 import graphics.FadeButton;
 import graphics.Listable;
 import graphics.listwindows.*;
@@ -155,8 +156,8 @@ public class SystemView extends BasicGameState implements ExitableState {
 
 
 	} // end update method
-	
-	
+
+
 
 	@Override
 	public int getID() {
@@ -168,10 +169,10 @@ public class SystemView extends BasicGameState implements ExitableState {
 	void setSelectedSystem(StarSystem sys){
 		this.sys = sys;
 	}
-	
 
-	
-	
+
+
+
 	private Game getWorld(StateBasedGame game){
 		Game world = ((GalaxyState) game.getState(SpaceStrategy.GALAXY_STATE_ID)).getWorld();
 		return world;
@@ -275,8 +276,8 @@ public class SystemView extends BasicGameState implements ExitableState {
 
 
 	}
-	
-	
+
+
 	private void renderProduction(StateBasedGame game, Graphics g){
 		int index = -1;
 		int val = rightWindow.getSelectedButtonIndex();
@@ -304,6 +305,9 @@ public class SystemView extends BasicGameState implements ExitableState {
 		case 2: // ADD SHIP
 			if (oldRightIndex != val){
 				clearLists();
+				ArrayList<Constructable> ships = new ArrayList<>();
+				ships.addAll(Ship.getShipList());
+				listWindow = new QueueListWindow(LIST_WINDOW_START_X, BACKGROUND_START_Y, ships, getPlanet().getQueue(), getPlanet());
 			}
 
 			break;
@@ -387,6 +391,45 @@ public class SystemView extends BasicGameState implements ExitableState {
 
 
 	private void renderFleet(StateBasedGame game, Graphics g){
+
+		int val = rightWindow.getSelectedButtonIndex();
+
+		switch (val){
+
+		case 0:  // VIEW FLEETS
+			if (oldRightIndex != val){
+				clearLists();
+				tempListableList.addAll(getPlanet().getFleets());
+				listWindow = new ViewListWindow(LIST_WINDOW_START_X, BACKGROUND_START_Y, tempListableList);
+
+			}
+			break;
+		case 1:  // DISBAND FLEETS
+			if (oldRightIndex != val){
+				clearLists();
+
+
+			}
+			break;
+
+		case 2:
+			if (oldRightIndex != val){
+
+				
+				
+			}
+			break;
+
+
+
+
+		}
+
+
+
+
+
+		oldRightIndex = val;
 		listWindow.render(g, 0, 0);
 	}
 

@@ -47,13 +47,6 @@ public abstract class Building implements Constructable, Activatable {
 	}
 	
 	
-	public static ArrayList<Building> getBuildingList(Planet p){
-		ArrayList<Building> list = new ArrayList<Building>();
-		list.add(new House(p.getPlanetBuildingIDMax(), p));
-		list.add(new Factory(p.getPlanetBuildingIDMax(), p));
-		
-		return list;
-	}
 	@Override
 	public void setActivity(boolean b){
 		isActive = b;
@@ -89,5 +82,13 @@ public abstract class Building implements Constructable, Activatable {
 	}
 	
 	
+	
+	public static ArrayList<Building> getBuildingList(Planet p){
+		ArrayList<Building> list = new ArrayList<Building>();
+		list.add(new House(p.getPlanetBuildingIDMax(), p));
+		list.add(new Factory(p.getPlanetBuildingIDMax(), p));
+		
+		return list;
+	}
 	
 }

@@ -6,6 +6,7 @@ import org.newdawn.slick.Color;
 
 import entities.buildings.Factory;
 import entities.buildings.House;
+import entities.ships.Ship;
 
 public class Faction {
 
@@ -21,6 +22,7 @@ public class Faction {
 	private boolean[] exploredSystems; // something like this will probably have to be implemented so the played can't view full details of their opponent
 	private Game world;
 	private TechTree techTree;
+	private ArrayList<Ship> reserveShips;
 	
 	
 	//**********************Constructors and initialization methods *****************
@@ -38,6 +40,12 @@ public class Faction {
 	//************************Getters and Setters********************************
 	public String getName() {
 		return this.name;
+	}
+	public void addShip(Ship ship){
+		reserveShips.add(ship);
+	}
+	public ArrayList<Ship> getReserveShips(){
+		return reserveShips;
 	}
 	public void setName(String name) {
 		this.name = name;
