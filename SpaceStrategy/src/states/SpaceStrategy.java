@@ -22,7 +22,7 @@ public class SpaceStrategy extends StateBasedGame{
 	
 	// STATE IDs
 	public static final int MAIN_MENU_ID = 0, GALAXY_STATE_ID = 1, SYSTEM_VIEW_ID = 2, EMPIRE_VIEW_ID = 3, ECONOMY_VIEW_ID = 4, TECHNOLOGY_VIEW_ID = 5
-			, END_TURN_STATE_ID = 6, DESIGN_STATE_ID = 7, LEADER_STATE_ID = 8, FACTIONS_STATE_ID = 9, IN_GAME_MENU_STATE_ID = 10 ;
+			, END_TURN_STATE_ID = 6, DESIGN_STATE_ID = 7, LEADER_STATE_ID = 8, FACTIONS_STATE_ID = 9, IN_GAME_MENU_STATE_ID = 10, FLEET_CREATION_STATE_ID = 11 ;
 	public static TrueTypeFont NEUROPOL, GALANT_ST, GALANT;
 	public static Sound click1, beep1, beep2, error;
 	
@@ -45,6 +45,7 @@ public class SpaceStrategy extends StateBasedGame{
 		addState(new LeaderState(LEADER_STATE_ID));
 		addState(new FactionsState(FACTIONS_STATE_ID));
 		addState(new InGameMenuState(IN_GAME_MENU_STATE_ID));
+		addState(new FleetCreationState(FLEET_CREATION_STATE_ID));
 		enterState(MAIN_MENU_ID);
 		
 	}

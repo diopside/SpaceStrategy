@@ -412,9 +412,10 @@ public class SystemView extends BasicGameState implements ExitableState {
 			}
 			break;
 
-		case 2:
+		case 2: // CREATE FLEETS
 			if (oldRightIndex != val){
 
+				game.enterState(SpaceStrategy.FLEET_CREATION_STATE_ID);
 				
 				
 			}

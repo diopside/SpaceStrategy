@@ -82,16 +82,16 @@ public class GalaxyState extends BasicGameState implements ExitableState {
 		int mouseY = input.getAbsoluteMouseY();
 		
 		
-		if (input.isKeyDown(input.KEY_A))
+		if (input.isKeyDown(input.KEY_A) || mouseX <= 0 + 10)
 			if (xOffset >= - 250)
 				xOffset -= SCROLL_SPEED;
-		if (input.isKeyDown(input.KEY_D))
+		if (input.isKeyDown(input.KEY_D) || mouseX >= SpaceStrategy.WIDTH - 10)
 			if (xOffset + SpaceStrategy.WIDTH <= galaxyBackground.getWidth() + 250)
 				xOffset += SCROLL_SPEED;
-		if (input.isKeyDown(input.KEY_W))
+		if (input.isKeyDown(input.KEY_W) || mouseY <= 0 + 10)
 			if (yOffset >= - 250)
 				yOffset -= SCROLL_SPEED;
-		if (input.isKeyDown(input.KEY_S))
+		if (input.isKeyDown(input.KEY_S) || mouseY >= SpaceStrategy.HEIGHT - 10)
 			if (yOffset + SpaceStrategy.HEIGHT <= galaxyBackground.getHeight() + 250)
 				yOffset += SCROLL_SPEED;
 
