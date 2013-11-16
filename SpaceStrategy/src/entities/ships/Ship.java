@@ -58,6 +58,7 @@ public abstract class Ship implements Constructable {
 	public static ArrayList<Ship> getShipList(){
 		ArrayList<Ship> ships = new ArrayList<>();
 		ships.add(new ColonyShip(0, null, null, null, null));
+		ships.add(new WarShip(0, null, null, null, null));
 		return ships;
 	}
 }

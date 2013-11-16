@@ -6,7 +6,7 @@ import org.newdawn.slick.Color;
 
 import entities.buildings.Factory;
 import entities.buildings.House;
-import entities.ships.Ship;
+import entities.ships.*;
 
 public class Faction {
 
@@ -34,6 +34,7 @@ public class Faction {
 		this.name = name;
 		exploredSystems = new boolean[world.getSystems().length];
 		techTree = new TechTree();
+		reserveShips = new ArrayList<>();
 	}
 
 	
@@ -113,6 +114,19 @@ public class Faction {
 		p.addBuilding(new House(p.getPlanetBuildingIDMax(),p));
 		p.addBuilding(new Factory(p.getPlanetBuildingIDMax(),p));
 		p.setPopulation(2.0f);
+		
+		reserveShips.add(new ColonyShip(0, null, null, null, null));
+		reserveShips.add(new ColonyShip(0, null, null, null, null));
+		reserveShips.add(new ColonyShip(0, null, null, null, null));
+		reserveShips.add(new ColonyShip(0, null, null, null, null));
+		reserveShips.add(new ColonyShip(0, null, null, null, null));
+		reserveShips.add(new ColonyShip(0, null, null, null, null));
+		reserveShips.add(new ColonyShip(0, null, null, null, null));
+		reserveShips.add(new ColonyShip(0, null, null, null, null));
+		
+		reserveShips.add(new WarShip(0, null, null, null, null));
+		reserveShips.add(new WarShip(0, null, null, null, null));
+		reserveShips.add(new WarShip(0, null, null, null, null));
 	}
 	
 	public void addPlanet(Planet p){

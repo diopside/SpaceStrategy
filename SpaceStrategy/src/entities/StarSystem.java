@@ -98,6 +98,13 @@ public class StarSystem implements Renderable, Clickable {
 		}
 	}
 	
+	private int getX(){
+		return x;
+	}
+	private int getY(){
+		return y;
+	}
+	
 	// *******************************Static Methods *******************************************************************************
 	
 	

@@ -16,6 +16,7 @@ public class Fleet implements Listable, Removeable{
 	private Faction faction;
 	private short wins, losses;
 	private boolean isBeingDeconstructed;
+	private StarSystem system, destinationSystem;
 	
 	public Fleet(int id){
 		ID = (short) id;
